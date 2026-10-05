@@ -129,51 +129,53 @@ with col4:
 
 st.write("") # small spacing
 
-# Layout: Button and Result Side-by-Side
-res_col1, res_col2 = st.columns([1, 2.5])
+@st.dialog("Prediction Results")
+def show_result(prediction, status, color):
+    st.markdown(f"""
+        <div style="text-align: center; padding: 10px;">
+            <p style="font-size: 16px; color: #a0a0a0; margin-bottom: 5px;">Predicted Score</p>
+            <h1 style="color: #f9a826; font-size: 50px; margin-top: 0; margin-bottom: 10px;">{prediction:.2f}%</h1>
+            <h3 style="color: {color}; font-size: 24px; margin-top: 0;">{status}</h3>
+        </div>
+    """, unsafe_allow_html=True)
+    
+    if st.button("Awesome!", use_container_width=True):
+        st.rerun()
 
-with res_col1:
-    predict_btn = st.button("🎯 Predict Final Marks", use_container_width=True)
+st.write("") # small spacing
+
+# Layout: Button centered
+res_col1, res_col2, res_col3 = st.columns([1, 2, 1])
 
 with res_col2:
-    if predict_btn:
-        extracurricular_value = 1 if extracurricular == "Yes" else 0
-        input_data = pd.DataFrame({
-            "Study_Hours": [study_hours],
-            "Attendance_Percent": [attendance],
-            "Previous_Marks": [previous_marks],
-            "Assignment_Score": [assignment_score],
-            "Internal_Exam_Score": [internal_exam],
-            "Sleep_Hours": [sleep_hours],
-            "Extracurricular_Activities": [extracurricular_value],
-            "Internet_Usage_Hours": [internet_usage]
-        })
+    predict_btn = st.button("🎯 Predict Final Marks", use_container_width=True)
+
+if predict_btn:
+    extracurricular_value = 1 if extracurricular == "Yes" else 0
+    input_data = pd.DataFrame({
+        "Study_Hours": [study_hours],
+        "Attendance_Percent": [attendance],
+        "Previous_Marks": [previous_marks],
+        "Assignment_Score": [assignment_score],
+        "Internal_Exam_Score": [internal_exam],
+        "Sleep_Hours": [sleep_hours],
+        "Extracurricular_Activities": [extracurricular_value],
+        "Internet_Usage_Hours": [internet_usage]
+    })
+    
+    prediction = max(0, min(100, model.predict(input_data)[0]))
+    
+    if prediction >= 80:
+        status = "🌟 Excellent Performance"
+        color = "#4CAF50"
+    elif prediction >= 60:
+        status = "👍 Good Performance"
+        color = "#2196F3"
+    elif prediction >= 40:
+        status = "⚠️ Average Performance"
+        color = "#FF9800"
+    else:
+        status = "❗ Needs Improvement"
+        color = "#F44336"
         
-        prediction = max(0, min(100, model.predict(input_data)[0]))
-        
-        # Inline result display
-        if prediction >= 80:
-            status = "🌟 Excellent"
-            color = "#4CAF50"
-        elif prediction >= 60:
-            status = "👍 Good"
-            color = "#2196F3"
-        elif prediction >= 40:
-            status = "⚠️ Average"
-            color = "#FF9800"
-        else:
-            status = "❗ Needs Improvement"
-            color = "#F44336"
-            
-        st.markdown(f"""
-            <div style="display: flex; align-items: center; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 8px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                <div>
-                    <span style="font-size: 14px; color: #a0a0a0;">Predicted Score:</span><br>
-                    <span style="font-size: 26px; font-weight: bold; color: #f9a826;">{prediction:.2f}%</span>
-                </div>
-                <div>
-                    <span style="font-size: 14px; color: #a0a0a0;">Status:</span><br>
-                    <span style="font-size: 22px; font-weight: bold; color: {color};">{status}</span>
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
+    show_result(prediction, status, color)
