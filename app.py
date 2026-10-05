@@ -34,12 +34,15 @@ st.markdown("""
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.08);
         padding: 2.5rem 3rem !important;
-        margin-top: 8vh !important;
-        margin-bottom: auto !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
         max-width: 90% !important;
+        width: 100% !important;
+        
+        /* Perfect Centering */
+        position: absolute !important;
+        top: 53% !important; /* 53% accounts for the top navbar space */
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
     }
 
     /* Headings and text */
