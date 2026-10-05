@@ -13,8 +13,7 @@ st.set_page_config(
 # Custom CSS for Dark Glassmorphism Dashboard (No scroll)
 st.markdown("""
 <style>
-    /* Hide Streamlit default header and footer to save space */
-    header {visibility: hidden;}
+    /* Hide Streamlit default footer */
     footer {visibility: hidden;}
 
     /* Background Gradient */
