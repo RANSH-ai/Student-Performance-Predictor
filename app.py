@@ -33,10 +33,13 @@ st.markdown("""
         -webkit-backdrop-filter: blur(16px);
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 1.5rem 2rem !important;
-        margin: 1.5rem auto !important;
+        padding: 2.5rem 3rem !important;
+        margin-top: 8vh !important;
+        margin-bottom: auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
-        max-width: 95% !important;
+        max-width: 90% !important;
     }
 
     /* Headings and text */
