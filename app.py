@@ -12,6 +12,72 @@ st.set_page_config(
     layout="centered"
 )
 
+# Custom CSS for Glassmorphism
+st.markdown("""
+<style>
+    /* Gradient background for the whole page */
+    .stApp {
+        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        background-attachment: fixed;
+    }
+    
+    /* Glass card effect for the main container */
+    .block-container {
+        background: rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        padding: 3rem !important;
+        margin-top: 3rem !important;
+        margin-bottom: 3rem !important;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    }
+
+    /* Text color for contrast */
+    h1, h2, h3, p, label, .stMarkdown {
+        color: #2d3748 !important;
+    }
+    
+    /* Input fields glass styling */
+    div[data-baseweb="input"] > div, 
+    div[data-baseweb="select"] > div {
+        background-color: rgba(255, 255, 255, 0.6) !important;
+        border: 1px solid rgba(255, 255, 255, 0.8) !important;
+        border-radius: 8px;
+    }
+    
+    input, select {
+        color: #2d3748 !important;
+    }
+    
+    /* Button styling */
+    .stButton>button {
+        background: rgba(255, 255, 255, 0.5);
+        color: #2d3748;
+        border: 1px solid rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        padding: 10px 24px;
+        font-weight: bold;
+        transition: all 0.3s ease-in-out;
+    }
+    
+    .stButton>button:hover {
+        background: rgba(255, 255, 255, 0.8);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+    
+    /* Success Alert Styling */
+    .stAlert {
+        background: rgba(255, 255, 255, 0.4) !important;
+        backdrop-filter: blur(5px);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 # Title
 st.title("🎓 Student Performance Predictor")
 st.write(
