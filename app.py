@@ -12,15 +12,6 @@ st.set_page_config(
 # Custom CSS for better aesthetics
 st.markdown("""
 <style>
-    /* Global Background and text color */
-    .stApp {
-        background-color: #F7F5F0; /* Ivory background */
-    }
-    
-    p, .stMarkdown, .stText, label {
-        color: #4A5343 !important; /* Darker sage for text */
-    }
-
     /* Add some padding at the top */
     .block-container {
         padding-top: 2rem;
@@ -47,7 +38,7 @@ st.markdown("""
     /* Style the predict button */
     .stButton>button {
         background-color: #7B8B6F; /* Sage Green */
-        color: #F7F5F0; /* Ivory text */
+        color: #F7F5F0 !important; /* Ivory text */
         font-size: 18px;
         font-weight: bold;
         border-radius: 8px;
@@ -57,7 +48,6 @@ st.markdown("""
     }
     .stButton>button:hover {
         background-color: #59654F; /* Darker Sage */
-        color: #F7F5F0;
         border: 1px solid #4A5343;
         transform: scale(1.02);
     }
@@ -69,14 +59,6 @@ st.markdown("""
         border-bottom: 2px solid #DEDACC; /* Darker Ivory */
         padding-bottom: 10px;
         margin-bottom: 20px;
-    }
-    
-    /* Modify Metric text */
-    [data-testid="stMetricValue"] {
-        color: #59654F !important;
-    }
-    [data-testid="stMetricLabel"] p {
-        color: #7B8B6F !important;
     }
 </style>
 """, unsafe_allow_html=True)
