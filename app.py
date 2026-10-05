@@ -12,6 +12,15 @@ st.set_page_config(
 # Custom CSS for better aesthetics
 st.markdown("""
 <style>
+    /* Global Background and text color */
+    .stApp {
+        background-color: #F7F5F0; /* Ivory background */
+    }
+    
+    p, .stMarkdown, .stText, label {
+        color: #4A5343 !important; /* Darker sage for text */
+    }
+
     /* Add some padding at the top */
     .block-container {
         padding-top: 2rem;
@@ -19,7 +28,7 @@ st.markdown("""
     
     /* Style the main title */
     .main-title {
-        color: #1E3A8A;
+        color: #59654F; /* Sage Green */
         text-align: center;
         font-family: 'Arial', sans-serif;
         font-weight: 700;
@@ -30,34 +39,44 @@ st.markdown("""
     .sub-title {
         text-align: center;
         font-size: 1.1rem;
-        color: #4B5563;
+        color: #7B8B6F; /* Lighter Sage Green */
         margin-top: 10px;
         margin-bottom: 30px;
     }
 
     /* Style the predict button */
     .stButton>button {
-        background-color: #2563EB;
-        color: white;
+        background-color: #7B8B6F; /* Sage Green */
+        color: #F7F5F0; /* Ivory text */
         font-size: 18px;
         font-weight: bold;
         border-radius: 8px;
         padding: 10px 24px;
         transition: all 0.3s ease;
-        border: none;
+        border: 1px solid #59654F;
     }
     .stButton>button:hover {
-        background-color: #1D4ED8;
+        background-color: #59654F; /* Darker Sage */
+        color: #F7F5F0;
+        border: 1px solid #4A5343;
         transform: scale(1.02);
     }
     
     /* Headers for sections */
     .section-header {
-        color: #374151;
+        color: #59654F; /* Sage Green */
         font-weight: 600;
-        border-bottom: 2px solid #E5E7EB;
+        border-bottom: 2px solid #DEDACC; /* Darker Ivory */
         padding-bottom: 10px;
         margin-bottom: 20px;
+    }
+    
+    /* Modify Metric text */
+    [data-testid="stMetricValue"] {
+        color: #59654F !important;
+    }
+    [data-testid="stMetricLabel"] p {
+        color: #7B8B6F !important;
     }
 </style>
 """, unsafe_allow_html=True)
