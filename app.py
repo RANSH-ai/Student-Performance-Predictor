@@ -6,32 +6,38 @@ import joblib
 st.set_page_config(
     page_title="Student Performance Dashboard",
     page_icon="🎓",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"
 )
 
-# Custom CSS for Dark Glassmorphism Dashboard
+# Custom CSS for Dark Glassmorphism Dashboard (No scroll)
 st.markdown("""
 <style>
-    /* Background Gradient for the app (Dark mesh gradient) */
+    /* Hide Streamlit default header and footer to save space */
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+
+    /* Background Gradient */
     .stApp {
         background: radial-gradient(circle at 15% 50%, rgba(46, 52, 64, 1), transparent 50%),
                     radial-gradient(circle at 85% 30%, rgba(34, 53, 40, 1), transparent 50%),
                     radial-gradient(circle at 50% 80%, rgba(60, 36, 21, 1), transparent 50%);
         background-color: #12141c;
-        background-attachment: fixed;
+        /* Try to prevent scroll */
+        overflow-y: hidden !important; 
     }
     
-    /* Main block container (Glass panel) */
+    /* Main container styling (fit to screen) */
     .block-container {
         background: rgba(30, 32, 40, 0.45);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border-radius: 20px;
         border: 1px solid rgba(255, 255, 255, 0.08);
-        padding: 2rem 3rem !important;
-        margin-top: 3rem !important;
-        margin-bottom: 3rem !important;
+        padding: 1.5rem 2rem !important;
+        margin: 1.5rem auto !important;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+        max-width: 95% !important;
     }
 
     /* Headings and text */
@@ -42,7 +48,8 @@ st.markdown("""
     h1 {
         font-weight: 800;
         text-align: center;
-        margin-bottom: 10px;
+        margin-bottom: 20px !important;
+        padding-bottom: 5px !important;
         background: -webkit-linear-gradient(#f9a826, #f37335);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -53,41 +60,36 @@ st.markdown("""
     div[data-baseweb="select"] > div {
         background-color: rgba(20, 22, 30, 0.5) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 10px;
+        border-radius: 8px;
         color: white !important;
+        height: 38px !important;
+        min-height: 38px !important;
     }
     
     input, select {
         color: white !important;
+        font-size: 14px !important;
     }
 
-    /* Button styling (Orange accent) */
+    /* Button styling */
     .stButton>button {
         background: rgba(249, 168, 38, 0.85);
         color: #12141c !important;
         border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 10px;
-        padding: 12px 24px;
-        font-size: 18px;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 16px;
         font-weight: bold;
         transition: all 0.3s ease-in-out;
+        height: 100%;
     }
     
     .stButton>button:hover {
         background: rgba(249, 168, 38, 1);
-        transform: translateY(-3px);
-        box-shadow: 0 6px 20px rgba(249, 168, 38, 0.4);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(249, 168, 38, 0.4);
     }
     
-    /* Dividers */
-    hr {
-        border-color: rgba(255, 255, 255, 0.1) !important;
-    }
-    
-    /* Metric styling */
-    [data-testid="stMetricValue"] {
-        color: #f9a826 !important;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -100,61 +102,73 @@ model = load_model()
 
 # Title
 st.markdown("<h1>🎓 Student Performance Dashboard</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: #a0a0a0 !important; font-size: 1.1rem; margin-bottom: 30px;'>Enter the student's details to predict their final examination marks.</p>", unsafe_allow_html=True)
 
-st.divider()
-
-col1, col2 = st.columns(2, gap="large")
+# Layout: 4 columns for inputs
+col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.subheader("📚 Academic Details")
     study_hours = st.number_input("Study Hours (daily)", min_value=0.0, max_value=24.0, value=7.0, step=0.5)
-    attendance = st.number_input("Attendance (%)", min_value=0.0, max_value=100.0, value=85.0, step=1.0)
-    previous_marks = st.number_input("Previous Marks", min_value=0.0, max_value=100.0, value=75.0, step=1.0)
-    assignment_score = st.number_input("Assignment Score", min_value=0.0, max_value=100.0, value=80.0, step=1.0)
-    internal_exam = st.number_input("Internal Exam Score", min_value=0.0, max_value=100.0, value=78.0, step=1.0)
+    internal_exam = st.number_input("Internal Exam", min_value=0.0, max_value=100.0, value=78.0, step=1.0)
 
 with col2:
-    st.subheader("🌱 Lifestyle Details")
-    sleep_hours = st.number_input("Sleep Hours (nightly)", min_value=0.0, max_value=24.0, value=7.0, step=0.5)
-    internet_usage = st.number_input("Internet Usage Hours", min_value=0.0, max_value=24.0, value=3.0, step=0.5)
-    st.markdown("<br>", unsafe_allow_html=True)
-    extracurricular = st.selectbox("Extracurricular Activities", ["Yes", "No"])
+    attendance = st.number_input("Attendance (%)", min_value=0.0, max_value=100.0, value=85.0, step=1.0)
+    sleep_hours = st.number_input("Sleep (nightly)", min_value=0.0, max_value=24.0, value=7.0, step=0.5)
 
-st.divider()
+with col3:
+    previous_marks = st.number_input("Previous Marks", min_value=0.0, max_value=100.0, value=75.0, step=1.0)
+    internet_usage = st.number_input("Internet (hours)", min_value=0.0, max_value=24.0, value=3.0, step=0.5)
 
-# Prediction button
-col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
-with col_btn2:
+with col4:
+    assignment_score = st.number_input("Assignment Score", min_value=0.0, max_value=100.0, value=80.0, step=1.0)
+    extracurricular = st.selectbox("Extracurricular", ["Yes", "No"])
+
+st.write("") # small spacing
+
+# Layout: Button and Result Side-by-Side
+res_col1, res_col2 = st.columns([1, 2.5])
+
+with res_col1:
     predict_btn = st.button("🎯 Predict Final Marks", use_container_width=True)
 
-if predict_btn:
-    extracurricular_value = 1 if extracurricular == "Yes" else 0
-    input_data = pd.DataFrame({
-        "Study_Hours": [study_hours],
-        "Attendance_Percent": [attendance],
-        "Previous_Marks": [previous_marks],
-        "Assignment_Score": [assignment_score],
-        "Internal_Exam_Score": [internal_exam],
-        "Sleep_Hours": [sleep_hours],
-        "Extracurricular_Activities": [extracurricular_value],
-        "Internet_Usage_Hours": [internet_usage]
-    })
-    
-    with st.spinner('Analyzing...'):
-        prediction = max(0, min(100, model.predict(input_data)[0]))
-    
-    st.success("Analysis Complete!")
-    
-    res_col1, res_col2, res_col3 = st.columns([1, 2, 1])
-    with res_col2:
-        st.metric(label="Predicted Final Exam Marks", value=f"{prediction:.2f}%")
+with res_col2:
+    if predict_btn:
+        extracurricular_value = 1 if extracurricular == "Yes" else 0
+        input_data = pd.DataFrame({
+            "Study_Hours": [study_hours],
+            "Attendance_Percent": [attendance],
+            "Previous_Marks": [previous_marks],
+            "Assignment_Score": [assignment_score],
+            "Internal_Exam_Score": [internal_exam],
+            "Sleep_Hours": [sleep_hours],
+            "Extracurricular_Activities": [extracurricular_value],
+            "Internet_Usage_Hours": [internet_usage]
+        })
         
+        prediction = max(0, min(100, model.predict(input_data)[0]))
+        
+        # Inline result display
         if prediction >= 80:
-            st.info("🌟 Excellent Performance")
+            status = "🌟 Excellent"
+            color = "#4CAF50"
         elif prediction >= 60:
-            st.info("👍 Good Performance")
+            status = "👍 Good"
+            color = "#2196F3"
         elif prediction >= 40:
-            st.warning("⚠️ Average Performance")
+            status = "⚠️ Average"
+            color = "#FF9800"
         else:
-            st.error("❗ Needs Improvement")
+            status = "❗ Needs Improvement"
+            color = "#F44336"
+            
+        st.markdown(f"""
+            <div style="display: flex; align-items: center; justify-content: space-around; background: rgba(0,0,0,0.3); padding: 8px 20px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                <div>
+                    <span style="font-size: 14px; color: #a0a0a0;">Predicted Score:</span><br>
+                    <span style="font-size: 26px; font-weight: bold; color: #f9a826;">{prediction:.2f}%</span>
+                </div>
+                <div>
+                    <span style="font-size: 14px; color: #a0a0a0;">Status:</span><br>
+                    <span style="font-size: 22px; font-weight: bold; color: {color};">{status}</span>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
